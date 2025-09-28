@@ -93,9 +93,54 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				</ul>
 				<p>We're currently putting the final touches on the site and menu. If you'd like to be notified when we launch or place a pre-order, reach out:</p>
 				<ul>
-					<li>Email: <a href="mailto:radwa@teta-w-gedo.com">radwa@teta-w-gedo.com</a></li>
+					<li>
+						Email:
+						<button id="revealEmail" style="margin-left:0.5rem;padding:0.25rem 0.5rem;border-radius:6px;border:1px solid #ccc;">Show & copy email</button>
+						<span id="emailContainer" style="margin-left:0.6rem;display:inline-block;color:#064e2b;font-weight:600"></span>
+					</li>
 					<li>Instagram: <a href="https://instagram.com/tetawgedo.kitchen">@tetawgedo.kitchen</a></li>
 				</ul>
+				<script>
+					(() => {
+						// Assemble email from separate parts to make scraping harder
+						const parts = ['radwa', 'teta-w-gedo', 'com'];
+						const revealBtn = document.getElementById('revealEmail');
+						const container = document.getElementById('emailContainer');
+
+						function buildEmail() {
+							return parts[0] + '@' + parts[1] + '.' + parts[2];
+						}
+
+						revealBtn.addEventListener('click', async () => {
+							const email = buildEmail();
+							// create link
+							const a = document.createElement('a');
+							a.href = 'mailto:' + email;
+							a.textContent = email;
+							a.style.color = '#075E54';
+							a.style.fontWeight = '700';
+							a.setAttribute('rel', 'noopener noreferrer nofollow');
+							container.innerHTML = '';
+							container.appendChild(a);
+
+							// copy to clipboard with graceful fallback
+							try {
+								await navigator.clipboard.writeText(email);
+								revealBtn.textContent = 'Email copied';
+								setTimeout(() => (revealBtn.textContent = 'Show & copy email'), 2500);
+							} catch (err) {
+								revealBtn.textContent = 'Copy failed';
+								setTimeout(() => (revealBtn.textContent = 'Show & copy email'), 2000);
+								// fallback: select the email text to encourage manual copy
+								const range = document.createRange();
+								range.selectNodeContents(container);
+								const sel = window.getSelection();
+								sel.removeAllRanges();
+								sel.addRange(range);
+							}
+						});
+					})();
+				</script>
 				<p style="margin-top:1rem;color:#555;">Thanks for your patience — we can't wait to serve you a taste of home soon.</p>
 			</section>
 		</main>
