@@ -20,6 +20,72 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				</div>
 				<h1>Welcome to Teta w Gedo</h1>
 				<p style="font-size:1.05rem;">Home of traditional Egyptian favorites like <strong>feteer</strong> and <strong>qeshta</strong>, plus made-to-order birthday cakes and desserts that are to die for.</p>
+				<!-- WhatsApp CTA (prominent, protected reveal) -->
+				<section aria-labelledby="whatsapp-heading" style="margin:1.5rem 0;padding:1rem;border-radius:10px;background:linear-gradient(180deg,#e6ffef,#f0fff4);border:1px solid #c6f3d1;">
+					<h2 id="whatsapp-heading" style="margin:0 0 0.5rem;">Find us via our WhatsApp group</h2>
+					<p style="margin:0 0 0.75rem;">This is the fastest way to place orders — join the group to direct message your order to Radwa. To help keep the group safe from scammers and bots, please confirm you understand the rules and complete a quick check before the invite is revealed.</p>
+					<div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+						<label style="display:flex;align-items:center;gap:0.5rem;font-weight:600;">
+							<input id="agreeRules" type="checkbox" /> I agree to the group rules
+						</label>
+						<div style="display:flex;align-items:center;gap:0.5rem;">
+							<span id="mathQuestion" style="font-weight:600;">&nbsp;</span>
+							<input id="mathAnswer" type="text" inputmode="numeric" placeholder="Answer" style="width:5.5rem;padding:0.25rem;border-radius:6px;border:1px solid #ccc;" />
+							<button id="revealBtn" style="background:#25D366;color:white;border:none;padding:0.5rem 0.9rem;border-radius:8px;font-weight:700;cursor:pointer;">Reveal Invite</button>
+						</div>
+					</div>
+					<div id="inviteArea" style="margin-top:0.75rem;display:none;">
+						<p style="margin:0 0 0.5rem;color:#064e2b;">Invite link (click to open):</p>
+						<a id="waLink" href="#" target="_blank" rel="noopener noreferrer nofollow" style="display:inline-block;background:#075E54;color:white;padding:0.5rem 0.9rem;border-radius:8px;text-decoration:none;font-weight:700;">Join WhatsApp orders group</a>
+						<button id="copyBtn" style="margin-left:0.5rem;padding:0.4rem 0.6rem;border-radius:6px;border:1px solid #ccc;background:white;">Copy link</button>
+						<p style="margin-top:0.5rem;font-size:0.9rem;color:#444;">Rules: Be respectful, only post order requests, include pickup/delivery time and phone number. Admins will remove scammers.</p>
+					</div>
+					<script>
+						(() => {
+							// Simple anti-bot: random tiny math question; link assembled from parts to avoid static scraping
+							const a = Math.floor(Math.random() * 7) + 2; // 2-8
+							const b = Math.floor(Math.random() * 7) + 1; // 1-7
+							const qEl = document.getElementById('mathQuestion');
+							const ansEl = document.getElementById('mathAnswer');
+							const agreeEl = document.getElementById('agreeRules');
+							const btn = document.getElementById('revealBtn');
+							const inviteArea = document.getElementById('inviteArea');
+							const waLink = document.getElementById('waLink');
+							const copyBtn = document.getElementById('copyBtn');
+							const partA = 'https://chat.whatsapp.com/';
+							const partB = 'G9E2wwFMF2W8z5gFy8WnRW';
+							qEl.textContent = `What is ${a} + ${b}?`;
+							btn.addEventListener('click', (e) => {
+								e.preventDefault();
+								const userAns = parseInt(ansEl.value, 10);
+								if (!agreeEl.checked) {
+									alert('Please agree to the group rules before joining.');
+									return;
+								}
+								if (Number.isNaN(userAns) || userAns !== (a + b)) {
+									alert('Check your answer to the simple question — this helps keep bots out.');
+									return;
+								}
+								// Reveal link by assembling parts
+								const final = partA + partB;
+								waLink.href = final;
+								inviteArea.style.display = 'block';
+								// Focus the link for keyboard users
+								waLink.focus();
+							});
+							copyBtn.addEventListener('click', async () => {
+								const final = partA + partB;
+								try {
+									await navigator.clipboard.writeText(final);
+									copyBtn.textContent = 'Copied!';
+									setTimeout(() => (copyBtn.textContent = 'Copy link'), 2000);
+								} catch (err) {
+									prompt('Copy this link:', final);
+								}
+							});
+						})();
+					</script>
+				</section>
 				<ul>
 					<li>Authentic oriental & Egyptian savory pastries (feteer, pies, and more)</li>
 					<li>Fresh qeshta (clotted cream) and traditional desserts</li>
