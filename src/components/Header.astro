@@ -5,7 +5,12 @@ import { SITE_TITLE } from '../consts';
 
 <header>
 	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
+		<h2 class="site-brand">
+			<a class="brand-link" href="/">
+				<img class="site-logo" src="/teta-w-gedo-logo.png" alt={SITE_TITLE} />
+				<span class="site-title">{SITE_TITLE}</span>
+			</a>
+		</h2>
 		<div class="internal-links">
 			<HeaderLink href="/">Home</HeaderLink>
 			<!-- Quick actions while site is under construction -->
@@ -55,14 +60,29 @@ import { SITE_TITLE } from '../consts';
 		background: white;
 		box-shadow: 0 2px 8px rgba(var(--black), 5%);
 	}
-	h2 {
+	/* site brand/logo */
+	.site-brand {
 		margin: 0;
-		font-size: 1em;
 	}
-
-	h2 a,
-	h2 a.active {
+	.brand-link {
+		display: flex;
+		align-items: center;
 		text-decoration: none;
+		color: inherit;
+	}
+	.site-logo {
+		height: 48px;
+		width: auto;
+		margin-right: 0.5rem;
+		display: inline-block;
+	}
+	.site-title {
+		font-size: 1rem;
+		font-weight: 700;
+	}
+	.brand-link:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
 	}
 	nav {
 		display: flex;
